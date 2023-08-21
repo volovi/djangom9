@@ -1,0 +1,8 @@
+{% extends 'm9/base.html' %}
+{% block content %}{% for magic_square in magic_squares %}
+    <table data-hint="{{magic_square.hint}}">{% for row in magic_square.values %}
+      <tr>{% for x in row %}
+        <td{% if not x|divisibleby:2 %} data-odd{% endif %}>{{x}}</td>{% endfor %}
+      </tr>{% endfor %}
+    </table>{% endfor %}
+{% endblock %}

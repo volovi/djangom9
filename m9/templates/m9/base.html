@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The 9 x 9 Pan-Magic Squares</title>
+    <style>
+      * {
+        padding: 0;
+      }
+      body {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 500px);
+        justify-content: space-evenly;
+        grid-gap: 20px;
+        grid-auto-rows: 500px;
+        text-align: center;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      td {
+        border: thin solid lightblue;
+      }
+      td[data-odd] {
+        background-color: yellow;
+      }
+      :root {
+        counter-reset: table;
+      }
+      table::before {
+        display: table-caption;
+        font-size: larger;
+        color: #abc;
+        counter-increment: table;
+        content: counter(table) ". " attr(data-hint);
+      }
+    </style>
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>
