@@ -11,7 +11,7 @@ class Command(BaseCommand):
                             help="Keep symmetric magic squares only.")
 
     def handle(self, *args, **options):
-        for values, hint in generate(options["symmetric_only"]):
-            MagicSquare(values=values, hint=hint).save()
+        for data in generate(s=options["symmetric_only"]):
+            MagicSquare.objects.create(**data)
 
         self.stdout.write(self.style.SUCCESS('Successfully seeded.'))
