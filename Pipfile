@@ -8,6 +8,9 @@ django = "*"
 psycopg = {version = "*", extras = ["binary"]}
 numpy = "*"
 pylint-django = "*"
+dj-database-url = "*"
+whitenoise = "*"
+gunicorn = "*"
 
 [dev-packages]
 
