@@ -1,21 +1,16 @@
-FROM python:3.9-alpine as base
-RUN apk add --no-cache \
-        libpq \
-        libgcc
-
-FROM base as builder
-RUN apk add --no-cache \
-        g++ \
-        musl-dev \
-        postgresql-dev
+FROM python:3.9-alpine
+# Keeps Python from generating .pyc files in the container
+ENV PYTHONDONTWRITEBYTECODE=1
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED=1
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt --prefix=/install
+RUN apk add --no-cache libgcc \
+        && apk add --no-cache --virtual build-dependencies g++ \
+        && pip install -r /tmp/requirements.txt \
+        && apk del build-dependencies
 COPY . /opt/app
-RUN cp -r /install/* /usr/local
 RUN python /opt/app/manage.py collectstatic --no-input
-
-FROM base as prod
-COPY --from=builder /install/ /usr/local/
-COPY --from=builder /opt/app/ /opt/app/
+RUN adduser --disabled-password --gecos "" user && chown -R user /opt/app
+USER user
 WORKDIR /opt/app
-CMD ["gunicorn", "djangom9.wsgi:application", "-b 0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "djangom9.wsgi"]
